@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Find an allergist</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+</head>
+<body>
+
+<h1 class="text-center mb-3">Allergist search</h1>
+
+<div id="map" class="mb-3" style="height:400px"></div>
+
+<div class="row">
+	<div class="col-sm"><input type="number" id="ZipCode" placeholder="ZIP code" class="form-control"></div>
+	<div class="col-sm input-group"><label for="Distance">Within a range of</label> <select id="Distance" class="form-control" style="max-width: 100px"><option>10</option><option>25</option><option>50</option><option>100</option><option>200</option></select> miles</div>
+	<div class="col-sm"><input type="submit" class="btn btn-primary" onclick="allergist_search()" id="search" value="Search"></div>
+</div>
+
+<div id="search_results"></div>
+
+<script>
+	var map;
+	var markers = L.featureGroup();
+
+	function allergist_search()
+	{
+		$("#search").prop("disabled", true);
+		markers.clearLayers();
+		let data = {
+			'ZipCode': $('#ZipCode').val(),
+			'Distance': $('#Distance').val(),
+			'Search': 'Search',
+			'f': 'json'
+		};
+		$.get("https://allergist.aaaai.org/find/index.php", data).done(receive_search_results).fail(search_failed).always(enable_search_button);
+	}
+	function receive_search_results(data)
+	{
+		if(data === null || !("Members" in data))
+		{
+			console.log("No member information returned");
+			return;
+		}
+		for(let member of data["Members"])
+		{
+			if(!("Addresses" in member))
+			{
+				console.log("No addresses exist for " + member["Full_Name"]);
+				continue;
+			}
+			for(let address of member["Addresses"])
+			{
+				let popup = "<b>" + member["Full_Name"] + "</b>";
+				if("Phone" in address)
+					popup += "<br><a href='tel:" + address["Phone"] + "'>" + address["Phone"] + "</a>";
+				else
+					console.log("No phone number found for member " + member["Full_Name"]);
+				popup += "<br>&nbsp;<br>" + (address["Address1"] + " " + address["Address2"] + " " + address["Address3"]).trim();
+				popup += "<br>" + address["City"] + ", " + address["StateProvince"] + " " + address["PostalCode"];
+				L.marker([address['Lat'], address['Lon']]).bindPopup(popup).addTo(markers);
+			}
+		}
+		map.fitBounds(markers.getBounds());
+	}
+	function search_failed(jqXHR, textStatus, errorThrown)
+	{
+		$('#search_results').text('Search failed');
+	}
+	function enable_search_button()
+	{
+		$("#search").prop("disabled", false);
+	}
+	function initialize_map()
+	{
+		map = L.map('map').setView([37.108, -98.438], 5);
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {"attribution": "<a href='https://www.openstreetmap.org/'>OpenStreetMap</a>"}).addTo(map);
+		markers.addTo(map);
+
+		L.Icon.Default.prototype.options.iconUrl = "marker.svg";
+		L.Icon.Default.prototype.options.iconRetinaUrl = "marker.svg";
+	}
+	$(initialize_map);
+</script>
+</body>
+</html>
