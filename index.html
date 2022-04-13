@@ -35,8 +35,6 @@
 		}
 
 		input[type="text"], input[type="email"], input[type="password"], input[type="search"], input[type="number"], input[type="tel"], textarea, select {
-			display: block;
-			width: 100%;
 			margin: 0 0 15px;
 			padding: 10px 10px 10px 2px;
 			background-color: transparent;
@@ -58,7 +56,7 @@
 <div id="map" style="height:400px; margin-bottom: 1rem"></div>
 
 <div>
-	<input type="text" id="ZipCode" placeholder="ZIP code" class="" min="0" maxlength="5" pattern="[0-9.]+" size="5" inputmode="numeric"><br>
+	<input type="text" id="ZipCode" placeholder="ZIP code" class="" min="0" maxlength="5" pattern="[0-9.]+" size="5" inputmode="numeric" style="max-width:100px"><br>
 	<span style="display: inline-block"><label for="Distance">Within a distance of</label> <select id="Distance" class="" style="max-width: 100px"><option>10</option><option>25</option><option>50</option><option>100</option><option>200</option></select> miles</span><br>
 	<input type="submit" class="btn" onclick="allergist_search()" id="search" value="Search">
 </div>
