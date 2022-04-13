@@ -59,7 +59,7 @@
 
 <div>
 	<input type="text" id="ZipCode" placeholder="ZIP code" class="" min="0" maxlength="5" pattern="[0-9.]+" size="5" inputmode="numeric"><br>
-	<span style=""><label for="Distance">Within a distance of</label> <select id="Distance" class="" style="max-width: 100px"><option>10</option><option>25</option><option>50</option><option>100</option><option>200</option></select> miles</span><br>
+	<span style="display: inline-block"><label for="Distance">Within a distance of</label> <select id="Distance" class="" style="max-width: 100px"><option>10</option><option>25</option><option>50</option><option>100</option><option>200</option></select> miles</span><br>
 	<input type="submit" class="btn" onclick="allergist_search()" id="search" value="Search">
 </div>
 
@@ -122,9 +122,8 @@
 		map = L.map('map').setView([37.108, -98.438], 5);
 		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {"attribution": "<a href='https://www.openstreetmap.org/'>OpenStreetMap</a>"}).addTo(map);
 		markers.addTo(map);
-
-//		L.Icon.Default.prototype.options.iconUrl = "http://search.foodallergy.org/marker.svg";
-//		L.Icon.Default.prototype.options.iconRetinaUrl = "http://search.foodallergy.org/marker.svg";
+		L.Icon.Default.prototype.options.iconUrl = "http://search.foodallergy.org/marker.svg";
+		L.Icon.Default.prototype.options.iconRetinaUrl = "http://search.foodallergy.org/marker.svg";
 	}
 	$(initialize_map);
 </script>
