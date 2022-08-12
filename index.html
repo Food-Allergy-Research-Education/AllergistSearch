@@ -7,61 +7,24 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0-beta.3/dist/leaflet.css" integrity="sha512-NTS862YmkhJyv1vfMq8LMX1mvv5ts6t2CWwnIj8c2pr575a4ySHmKFao02m09Y0h/c4hqN7XaEPFdwmrosi8Ww==" crossorigin="anonymous">
 	<script src="https://unpkg.com/leaflet@1.8.0-beta.3/dist/leaflet.js" integrity="sha512-n5GDt1jvgAr2K3S6hFiBlLFEIBfDKwpkZP5+AXkLoQxKHO3T0PlgcuFPwlLNtvCk1xZIzf5oPBdTOcMURuhBmg==" crossorigin="anonymous"></script>
-	<style>
-		.btn {
-			-ms-flex-pack: start;
-			-ms-flex-align: center;
-			align-items: center;
-			background-color: #f0db02;
-			background-image: url("https://www.foodallergy.org/themes/custom/fare/assets/images/bg-btn.svg");
-			background-position: 100% 0;
-			background-repeat: repeat-y;
-			background-size: 44px;
-			border: 0;
-			color: #38393a;
-			cursor: pointer;
-			display: inline-flex;
-			font-family: Montserrat,sans-serif;
-			font-size: .75rem;
-			font-weight: 800;
-			justify-content: flex-start;
-			letter-spacing: .0625em;
-			overflow: hidden;
-			padding: 21px 60px 21px 18px;
-			position: relative;
-			text-decoration: none;
-			text-transform: uppercase;
-			transition: .15s ease-in-out;
-		}
-
-		input[type="text"], input[type="email"], input[type="password"], input[type="search"], input[type="number"], input[type="tel"], textarea, select {
-			margin: 0 0 15px;
-			padding: 10px 10px 10px 2px;
-			background-color: transparent;
-			border: 0;
-			border-bottom: 2px solid #009aa6;
-			border-radius: 0;
-			box-shadow: none;
-			font-family: "Montserrat", sans-serif;
-			font-size: 16px;
-			color: #38393a;
-			-webkit-appearance: none;
-			transition: background-color 0.15s ease-in-out;
-		}
-
-	</style>
 </head>
-<body style="font-family: Montserrat, sans-serif; color: #38393a">
+<body>
 
 <div id="map" style="height:400px; margin-bottom: 1rem"></div>
 
 <div>
+	<label for="ZipCode">ZIP code</label>
 	<input type="text" id="ZipCode" placeholder="ZIP code" class="" min="0" maxlength="5" pattern="[0-9.]+" inputmode="numeric" style="width:100px; max-width:100px"><br>
 	<span style="display: inline-block"><label for="Distance">Within a distance of</label> <select id="Distance" class="" style="max-width: 100px"><option>10</option><option>25</option><option>50</option><option>100</option><option>200</option></select> miles</span><br>
 	<input type="submit" class="btn" onclick="allergist_search()" id="search" value="Search">
 </div>
 
 <div id="search_results"></div>
+
+<div style="text-align: center">
+	This allergist search is powered by the <a href="https://www.aaaai.org/" target="_blank">American Academy of Allergy, Asthma & Immunology</a>.<br>
+	<a href="https://www.aaaai.org/" target="_blank"><img src="aaaai-logo.jpg" alt="AAAAI logo" style="max-width: 200px; margin-top: 20px"></a>
+</div>
 
 <script>
 	var map;
@@ -120,8 +83,6 @@
 		map = L.map('map').setView([37.108, -98.438], 5);
 		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {"attribution": "<a href='https://www.openstreetmap.org/'>OpenStreetMap</a>"}).addTo(map);
 		markers.addTo(map);
-//		L.Icon.Default.prototype.options.iconUrl = "https://search.foodallergy.org/marker.svg";
-//		L.Icon.Default.prototype.options.iconRetinaUrl = "https://search.foodallergy.org/marker.svg";
 	}
 	$(initialize_map);
 </script>
